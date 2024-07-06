@@ -23,7 +23,7 @@ Aegis is the magic behind Thunder. Here’s how it works:
    - Based on your app usage, Aegis suggests other apps you might enjoy. These suggestions are shown to you when you are logged in.
 
 5. **Privacy First:**
-   - Aegis only requests new data occasionally or if it doesn’t have your latest info.
+   - Aegis only requests new data occasionally.
    - We never sell your data to anyone, ever.
 
 With Thunder and Aegis, you get awesome app recommendations tailored just for you, and your data stays safe and private. Enjoy exploring! 🚀
