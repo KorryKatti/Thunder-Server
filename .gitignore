@@ -1,2 +1,3 @@
 .venv/
 userserverinfo.json
+secret.key
