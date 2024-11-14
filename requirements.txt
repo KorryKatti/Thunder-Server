@@ -2,3 +2,4 @@ Flask
 gunicorn
 psutil
 cryptography
+Flask-Limiter
