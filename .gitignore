@@ -3,5 +3,5 @@ userserverinfo.json
 secret.key
 
 # database files
-
+.env
 *.db
