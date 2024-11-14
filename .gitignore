@@ -1,3 +1,7 @@
 .venv/
 userserverinfo.json
 secret.key
+
+# database files
+
+*.db
