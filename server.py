@@ -127,10 +127,10 @@ def logreg():
 
     # Validate input
     if not username or not email:
-        return jsonify({"error": "Username and email are required"}), 400
+        return jsonify({"code": 2001, "message": "Username and email are required"}), 400
 
-    if len(description) > 500:
-        return jsonify({"error": "Description cannot exceed 500 characters"}), 400
+    if description and len(description) > 500:
+        return jsonify({"code": 2002, "message": "Description cannot exceed 500 characters"}), 400
 
     # Encrypt the email
     encrypted_email = cipher.encrypt(email.encode()).decode()
@@ -143,19 +143,23 @@ def logreg():
         cursor.execute("SELECT * FROM users WHERE username = ? AND email = ?", (username, encrypted_email))
         existing_user = cursor.fetchone()
 
-        # If the user exists, log in successfully
         if existing_user:
-            decrypted_email = cipher.decrypt(existing_user[3].encode()).decode()  # Decrypt stored email for display
-            return jsonify({"message": "Login successful", "user_data": {
-                "id": existing_user[0],
-                "username": existing_user[1],
-                "uuid": existing_user[2],
-                "email": decrypted_email,
-                "profile_url": existing_user[4],
-                "description": existing_user[5]
-            }})
+            # User exists, login successful
+            decrypted_email = cipher.decrypt(existing_user[3].encode()).decode()  # Decrypt stored email
+            return jsonify({
+                "code": 1001,
+                "message": "Login successful",
+                "user_data": {
+                    "id": existing_user[0],
+                    "username": existing_user[1],
+                    "uuid": existing_user[2],
+                    "email": decrypted_email,
+                    "profile_url": existing_user[4],
+                    "description": existing_user[5]
+                }
+            }), 200
 
-        # Generate a UUID and insert new user
+        # User does not exist, register them
         user_uuid = str(uuid.uuid4())
         cursor.execute("""
             INSERT INTO users (username, uuid, email, profile_url, description)
@@ -165,17 +169,29 @@ def logreg():
         conn.commit()
         conn.close()
 
-        return jsonify({"message": "User registered successfully", "user_data": {
-            "username": username,
-            "email": email,  # Return plain email after registering
-            "uuid": user_uuid,
-            "profile_url": profile_url,
-            "description": description
-        }})
+        return jsonify({
+            "code": 1002,
+            "message": "User registered successfully",
+            "user_data": {
+                "username": username,
+                "email": email,
+                "uuid": user_uuid,
+                "profile_url": profile_url,
+                "description": description
+            }
+        }), 201
 
     except Exception as e:
         print(f"Error: {e}")
-        return jsonify({"error": "An error occurred while processing the request"}), 500
+        return jsonify({"code": 3001, "message": "An error occurred while processing the request"}), 500
+
+
+"""
+TODO:
+1. profile pages
+2. some basic data collection
+3. end sem preparation
+"""
 
 
 

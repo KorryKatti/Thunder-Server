@@ -5,3 +5,4 @@ secret.key
 # database files
 .env
 *.db
+index.json
